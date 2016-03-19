@@ -8,7 +8,7 @@ LIB = os.path.join('..', '..', 'lib')
 MONTAGELIB = os.path.join('..', '..', 'MontageLib')
 
 extensions = [
-    Extension("_gen", ["_gen.pyx"],
+    Extension("_montage_wrappers", ["_montage_wrappers.pyx"],
         include_dirs = [os.path.join(LIB, 'include'), MONTAGELIB],
         libraries = ['wcs', 'coord','mtbl','cfitsio','m'],
         library_dirs = [LIB],

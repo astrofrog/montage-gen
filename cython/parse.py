@@ -52,8 +52,8 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
 
     functions.append(function)
 
-with open('gen.pxd', 'w') as f:
+with open('montage_wrappers.pxd', 'w') as f:
     f.write(template_pxd.render(functions=functions))
 
-with open('_gen.pyx', 'w') as f:
+with open('_montage_wrappers.pyx', 'w') as f:
     f.write(template_pyx.render(functions=functions))

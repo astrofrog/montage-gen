@@ -1,13 +1,18 @@
+import os
+
 from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Build import cythonize
 
+LIB = os.path.join('..', '..', 'lib')
+MONTAGELIB = os.path.join('..', '..', 'MontageLib')
+
 extensions = [
-    Extension("_test", ["_test.pyx"],
-        include_dirs = ['../lib/include/'],
+    Extension("_gen", ["_gen.pyx"],
+        include_dirs = [os.path.join(LIB, 'include'), MONTAGELIB],
         libraries = ['wcs', 'coord','mtbl','cfitsio','m'],
-        library_dirs = ['../lib/'],
-        extra_objects = ['../MontageLib/libmontage.a'])
+        library_dirs = [LIB],
+        extra_objects = [os.path.join(MONTAGELIB, 'libmontage.a')])
 ]
 
 setup(

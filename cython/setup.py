@@ -4,8 +4,8 @@ from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Build import cythonize
 
-LIB = os.path.join('..', '..', 'lib')
-MONTAGELIB = os.path.join('..', '..', 'MontageLib')
+LIB = os.path.join('..', '..', 'Montage', 'lib')
+MONTAGELIB = os.path.join('..', '..', 'Montage', 'MontageLib')
 
 extensions = [
     Extension("_montage_wrappers", ["_montage_wrappers.pyx"],

@@ -7,13 +7,13 @@ MONTAGELIB = os.path.join('..', '..', 'Montage', 'MontageLib')
 
 CTYPE = {}
 CTYPE['int'] = 'int '
-CTYPE['int*'] = 'int '
+CTYPE['int*'] = 'int *'
 CTYPE['integer'] = 'int '
 CTYPE['char'] = 'char '
 CTYPE['string'] = 'char *'
 CTYPE['string*'] = 'char *'
 CTYPE['boolean'] = 'int '
-CTYPE['boolean*'] = 'int '
+CTYPE['boolean*'] = 'int *'
 CTYPE['double'] = 'double '
 CTYPE['double*'] = 'double *'
 
@@ -39,6 +39,11 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
     function['name'] = data['function']
     function['struct_name'] = data['function'] + "Return"
 
+    if function['name'] == 'mMakeImg':
+        # For now, skip it until we make sure things work fine if there are
+        # no return values.
+        continue
+
     function['arguments'] = []
     function['arguments_decl'] = []
     for inp in data['arguments']:
@@ -49,8 +54,6 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
     function['struct_vars'] = []
     function['struct_vars_decl'] = []
     for ret in data['return']:
-        if len(ret) == 0:
-            continue
         struct_var = "{0}{1}".format(CTYPE[ret['type']], ret['name'])
         function['struct_vars'].append(ret['name'])
         function['struct_vars_decl'].append(struct_var)

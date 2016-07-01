@@ -3,14 +3,17 @@ import glob
 import json
 from jinja2 import Template
 
-MONTAGELIB = os.path.join('..', '..', 'MontageLib')
+MONTAGELIB = os.path.join('..', '..', 'Montage', 'MontageLib')
 
 CTYPE = {}
 CTYPE['int'] = 'int '
+CTYPE['int*'] = 'int '
 CTYPE['integer'] = 'int '
 CTYPE['char'] = 'char '
 CTYPE['string'] = 'char *'
+CTYPE['string*'] = 'char *'
 CTYPE['boolean'] = 'int '
+CTYPE['boolean*'] = 'int '
 CTYPE['double'] = 'double '
 CTYPE['double*'] = 'double *'
 
@@ -24,7 +27,7 @@ functions = []
 
 for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
 
-    print(json_file)
+    print("Parsing {0}...".format(json_file))
 
     with open(json_file, 'r') as fjson:
         data = json.load(fjson)
@@ -46,6 +49,8 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
     function['struct_vars'] = []
     function['struct_vars_decl'] = []
     for ret in data['return']:
+        if len(ret) == 0:
+            continue
         struct_var = "{0}{1}".format(CTYPE[ret['type']], ret['name'])
         function['struct_vars'].append(ret['name'])
         function['struct_vars_decl'].append(struct_var)

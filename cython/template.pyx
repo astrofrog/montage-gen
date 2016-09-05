@@ -9,4 +9,8 @@ cdef {{ func.name }}({{ func.arguments_decl|join(', ') }}):
     {% for var in func.struct_vars %}retdict['{{ var }}'] = ret.{{ var }}
     {% endfor %}return retdict    
 
+
+def {{ func.name }}_py({{ func.arguments_with_defaults|join(', ') }}):
+    return {{ func.name }}({{ func.arguments|join(', ') }})
+
 {% endfor %}

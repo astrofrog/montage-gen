@@ -10,14 +10,14 @@ MONTAGELIB = os.path.join('..', '..', 'Montage', 'MontageLib')
 extensions = [
     Extension("montage_wrappers._wrappers", ["montage_wrappers/_wrappers.pyx"],
         include_dirs = [os.path.join(LIB, 'include'), MONTAGELIB],
-        libraries = ['wcs', 'coord','mtbl','cfitsio','m'],
+        libraries = ['wcs', 'coord','mtbl','cfitsio','m', 'boundaries', 'freetype', 'twoplane', 'pixbounds', 'www', 'json', 'lodepng', 'cmd'],
         library_dirs = [LIB],
-        extra_objects = [os.path.join(MONTAGELIB, 'libmontage.a')]),
-    Extension("montage_wrappers.main", ["montage_wrappers/main.pyx"],
-        include_dirs = [os.path.join(LIB, 'include'), MONTAGELIB],
-        libraries = ['wcs', 'coord','mtbl','cfitsio','m'],
-        library_dirs = [LIB],
-        extra_objects = [os.path.join(MONTAGELIB, 'libmontage.a')])
+        extra_objects = [os.path.join(MONTAGELIB, 'libmontage.a'), os.path.join(LIB, 'libjpeg.a')]),
+    # Extension("montage_wrappers.main", ["montage_wrappers/main.pyx"],
+    #     include_dirs = [os.path.join(LIB, 'include'), MONTAGELIB],
+    #     libraries = ['wcs', 'coord','mtbl','cfitsio','m', 'boundaries', 'freetype', 'twoplane', 'pixbounds', 'www'],
+    #     library_dirs = [LIB],
+    #     extra_objects = [os.path.join(MONTAGELIB, 'libmontage.a')])
 ]
 
 setup(

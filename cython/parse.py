@@ -51,6 +51,7 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
 
     function['arguments'] = []
     function['arguments_decl'] = []
+    function['arguments_py'] = []
     
     for inp in data['arguments']:
         argument = "{0}{1}".format(CTYPE[inp['type']], inp['name'])
@@ -67,6 +68,28 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
                 function['arguments_with_defaults'].append(inp['name'] + '=' + repr(inp['default']))
             elif not 'default' in inp and not with_defaults:
                 function['arguments_with_defaults'].append(inp['name'])
+                
+    function['array'] = []
+    function['arguments_py'] = []
+    for inp in data['arguments']:
+        print(inp['type'])
+        if inp['type'] == 'double*':
+            function['array'].append("cdef _array.array {0}_arr = _array.array('d', {0})".format(inp['name']))
+            function['arguments_py'].append('{0}_arr.data.as_doubles'.format(inp['name']))
+        elif inp['type'] == 'int*':
+            function['array'].append("cdef _array.array {0}_arr = _array.array('i', {0})".format(inp['name']))
+            function['arguments_py'].append('{0}_arr.data.as_ints'.format(inp['name']))
+        elif inp['type'] == 'boolean*':
+            function['array'].append("cdef _array.array {0}_arr = _array.array('i', {0})".format(inp['name']))
+            function['arguments_py'].append('{0}_arr.data.as_ints'.format(inp['name']))
+        else:
+            if 'string' in inp['type']:
+                print("HERE", inp['name'])
+                function['arguments_py'].append(inp['name'] + ".encode('ascii')")
+            else:
+                function['arguments_py'].append(inp['name'])
+            
+    print(function['arguments_py'])
 
     function['struct_vars'] = []
     function['struct_vars_decl'] = []
@@ -75,7 +98,6 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
         function['struct_vars'].append(ret['name'])
         function['struct_vars_decl'].append(struct_var)
         
-    print(function)
 
     functions.append(function)
 

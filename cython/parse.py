@@ -17,6 +17,18 @@ CTYPE['boolean*'] = 'int *'
 CTYPE['double'] = 'double '
 CTYPE['double*'] = 'double *'
 
+PTYPE = {}
+PTYPE['int'] = 'int'
+PTYPE['int*'] = 'np.ndarray'
+PTYPE['integer'] = 'int'
+PTYPE['char'] = 'str'
+PTYPE['string'] = 'str'
+PTYPE['string*'] = 'str'
+PTYPE['boolean'] = 'bool'
+PTYPE['boolean*'] = 'np.ndarray'
+PTYPE['double'] = 'float'
+PTYPE['double*'] = 'np.ndarray'
+
 with open('template.pxd', 'r') as f:
     template_pxd = Template(f.read())
 
@@ -44,6 +56,10 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
     function['name'] = data['function']
     function['struct_name'] = data['function'] + "Return"
 
+    function['summary'] = data['desc']
+
+
+
     if function['name'] == 'mMakeImg':
         # For now, skip it until we make sure things work fine if there are
         # no return values.
@@ -52,7 +68,7 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
     function['arguments'] = []
     function['arguments_decl'] = []
     function['arguments_py'] = []
-    
+
     for inp in data['arguments']:
         argument = "{0}{1}".format(CTYPE[inp['type']], inp['name'])
         function['arguments'].append(inp['name'])
@@ -68,11 +84,10 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
                 function['arguments_with_defaults'].append(inp['name'] + '=' + repr(inp['default']))
             elif not 'default' in inp and not with_defaults:
                 function['arguments_with_defaults'].append(inp['name'])
-                
+
     function['array'] = []
     function['arguments_py'] = []
     for inp in data['arguments']:
-        print(inp['type'])
         if inp['type'] == 'double*':
             function['array'].append("cdef _array.array {0}_arr = _array.array('d', {0})".format(inp['name']))
             function['arguments_py'].append('{0}_arr.data.as_doubles'.format(inp['name']))
@@ -84,12 +99,9 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
             function['arguments_py'].append('{0}_arr.data.as_ints'.format(inp['name']))
         else:
             if 'string' in inp['type']:
-                print("HERE", inp['name'])
                 function['arguments_py'].append(inp['name'] + ".encode('ascii')")
             else:
                 function['arguments_py'].append(inp['name'])
-            
-    print(function['arguments_py'])
 
     function['struct_vars'] = []
     function['struct_vars_decl'] = []
@@ -97,7 +109,22 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
         struct_var = "{0}{1}".format(CTYPE[ret['type']], ret['name'])
         function['struct_vars'].append(ret['name'])
         function['struct_vars_decl'].append(struct_var)
-        
+
+    function['docstring_arguments'] = []
+    for with_defaults in [False, True]:
+
+        for inp in data['arguments']:
+
+            if 'default' in inp and with_defaults or  not 'default' in inp and not with_defaults:
+
+                arg = {}
+                arg['name'] = inp['name']
+                arg['type'] = PTYPE[inp['type']]
+                if 'default' in inp:
+                    arg['type'] += ", optional"
+                arg['description'] = inp['desc']
+                function['docstring_arguments'].append(arg)
+
 
     functions.append(function)
 

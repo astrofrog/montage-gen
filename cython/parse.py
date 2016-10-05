@@ -3,7 +3,12 @@ import glob
 import json
 from jinja2 import Template
 
-MONTAGELIB = os.path.join('..', '..', 'Montage', 'MontageLib')
+if os.path.exists(os.path.join('..', 'Montage')):
+    MONTAGELIB = os.path.join('..', 'Montage', 'MontageLib')
+elif os.path.exists(os.path.join('..', '..', 'Montage')):
+    MONTAGELIB = os.path.join('..', '..', 'Montage', 'MontageLib')
+else:
+    raise ValueError("Could not find the Montage directory")
 
 CTYPE = {}
 CTYPE['int'] = 'int '

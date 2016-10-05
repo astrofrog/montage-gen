@@ -6,7 +6,14 @@ import os
 import glob
 import json
 
-for json_file in glob.glob(os.path.join('..', 'Montage', 'MontageLib', '*', '*.json')):
+if os.path.exists(os.path.join('Montage')):
+    MONTAGELIB = os.path.join('Montage', 'MontageLib')
+elif os.path.exists(os.path.join('..', 'Montage')):
+    MONTAGELIB = os.path.join('..', 'Montage', 'MontageLib')
+else:
+    raise ValueError("Could not find the Montage directory")
+
+for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
     print("Validating {0}...".format(json_file))
     with open(json_file, 'r') as fjson:
         data = json.load(fjson)

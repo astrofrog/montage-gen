@@ -1,4 +1,4 @@
-import _wrappers
+import montage_direct._wrappers as _wrappers
 
 {% for func in functions %}
 

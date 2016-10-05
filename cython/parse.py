@@ -58,8 +58,6 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
 
     function['summary'] = data['desc']
 
-
-
     if function['name'] == 'mMakeImg':
         # For now, skip it until we make sure things work fine if there are
         # no return values.
@@ -124,7 +122,6 @@ for json_file in glob.glob(os.path.join(MONTAGELIB, '*', '*.json')):
                     arg['type'] += ", optional"
                 arg['description'] = inp['desc']
                 function['docstring_arguments'].append(arg)
-
 
     functions.append(function)
 

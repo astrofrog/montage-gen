@@ -29,13 +29,13 @@ PTYPE['boolean*'] = 'np.ndarray'
 PTYPE['double'] = 'float'
 PTYPE['double*'] = 'np.ndarray'
 
-with open('template.pxd', 'r') as f:
+with open('templates/template.pxd', 'r') as f:
     template_pxd = Template(f.read())
 
-with open('template.pyx', 'r') as f:
+with open('templates/template.pyx', 'r') as f:
     template_pyx = Template(f.read())
 
-with open('template_main.pyx', 'r') as f:
+with open('templates/template_main.pyx', 'r') as f:
     template_main_pyx = Template(f.read())
 
 
